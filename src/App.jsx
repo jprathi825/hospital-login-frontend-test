@@ -15,77 +15,76 @@ function App() {
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      setError("Please enter both email and password");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const loginRes = await axios.post(`${API_URL}/api/login`, {
-        email,
-        password,
-      });
-
-      const authToken = loginRes.data.token;
-      setToken(authToken);
-
-      const profileRes = await axios.get(`${API_URL}/api/profile`, {
-        headers: {
-          Authorization: authToken,
-        },
-      });
-
-      setProfile(profileRes.data);
-    } catch (err) {
-      console.error("Login error:", err.response?.data || err.message);
-      setError(err.response?.data || "Invalid email or password");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLogout = () => {
-    setProfile(null);
-    setEmail("");
-    setPassword("");
+const handleLogin = async () => {
+  if (!email || !password) {
+    setError("Please enter both email and password");
+    return;
+  }
+  try {
+    setLoading(true);
     setError("");
-    setToken("");
-    setAllUsers([]);
-    setShowAllUsers(false);
-  };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !loading) {
-      handleLogin();
-    }
-  };
+    const loginRes = await axios.post(`${API_URL}/api/login`, {
+      email,
+      password,
+    });
+    
+    const authToken = loginRes.data.token;
+    setToken(authToken);
+    
+    const profileRes = await axios.get(`${API_URL}/api/profile`, {
+      headers: {
+        Authorization: authToken,
+      },
+    });
+    
+    setProfile(profileRes.data);
+  } catch (err) {
+    console.error("Login error:", err.response?.data || err.message);
+    setError(err.response?.data || "Invalid email or password");
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const handleShowAllProfiles = async () => {
-    try {
-      setLoadingUsers(true);
-      const response = await axios.get(`${API_URL}/api/admin/users`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      setAllUsers(response.data);
-      setShowAllUsers(true);
-    } catch (err) {
-      console.error("Error fetching users:", err);
-      setError("Failed to fetch users");
-    } finally {
-      setLoadingUsers(false);
-    }
-  };
+const handleLogout = () => {
+  setProfile(null);
+  setEmail("");
+  setPassword("");
+  setError("");
+  setToken("");
+  setAllUsers([]);
+  setShowAllUsers(false);
+};
 
-  const handleBackToProfile = () => {
-    setShowAllUsers(false);
-  };
+const handleKeyPress = (e) => {
+  if (e.key === 'Enter' && !loading) {
+    handleLogin();
+  }
+};
 
+const handleShowAllProfiles = async () => {
+  try {
+    setLoadingUsers(true);
+    
+    const response = await axios.get(`${API_URL}/api/admin/users`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    
+    setAllUsers(response.data);
+    setShowAllUsers(true);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    setError("Failed to fetch users");
+  } finally {
+    setLoadingUsers(false);
+  }
+};
+
+const handleBackToProfile = () => {setShowAllUsers(false); };
+  
   return (
     <div className="app-container">
       {/* Animated background blobs */}
