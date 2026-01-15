@@ -25,7 +25,7 @@ function App() {
       setLoading(true);
       setError("");
 
-      const loginRes = await axios.post("{API_URL}/api/login", {
+      const loginRes = await axios.post(`{API_URL}/api/login`, {
         email,
         password,
       });
@@ -33,7 +33,7 @@ function App() {
       const authToken = loginRes.data.token;
       setToken(authToken);
 
-      const profileRes = await axios.get("{API_URL}/api/profile", {
+      const profileRes = await axios.get(`{API_URL}/api/profile`, {
         headers: {
           Authorization: authToken,
         },
@@ -67,7 +67,7 @@ function App() {
   const handleShowAllProfiles = async () => {
     try {
       setLoadingUsers(true);
-      const response = await axios.get("{API_URL}/api/admin/users", {
+      const response = await axios.get(`{API_URL}/api/admin/users`, {
         headers: {
           Authorization: token,
         },
