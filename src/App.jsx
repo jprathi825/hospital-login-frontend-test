@@ -13,6 +13,8 @@ function App() {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [token, setToken] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const handleLogin = async () => {
     if (!email || !password) {
       setError("Please enter both email and password");
@@ -23,7 +25,7 @@ function App() {
       setLoading(true);
       setError("");
 
-      const loginRes = await axios.post("http://localhost:5000/api/login", {
+      const loginRes = await axios.post("${API_URL}/api/login", {
         email,
         password,
       });
@@ -31,7 +33,7 @@ function App() {
       const authToken = loginRes.data.token;
       setToken(authToken);
 
-      const profileRes = await axios.get("http://localhost:5000/api/profile", {
+      const profileRes = await axios.get("${API_URL}/api/profile", {
         headers: {
           Authorization: authToken,
         },
@@ -65,7 +67,7 @@ function App() {
   const handleShowAllProfiles = async () => {
     try {
       setLoadingUsers(true);
-      const response = await axios.get("http://localhost:5000/api/admin/users", {
+      const response = await axios.get("${API_URL}/api/admin/users", {
         headers: {
           Authorization: token,
         },
